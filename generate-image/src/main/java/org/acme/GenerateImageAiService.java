@@ -3,11 +3,12 @@ package org.acme;
 import dev.langchain4j.data.image.Image;
 import dev.langchain4j.service.UserMessage;
 import io.quarkiverse.langchain4j.RegisterAiService;
+import io.smallrye.mutiny.Uni;
 
 @RegisterAiService
 public interface GenerateImageAiService {
 
-    Image generateImage(String prompt);
+    Uni<Image> generateImage(String prompt);
 
     @UserMessage("""
         Generate a short name for the given image available at {image}.

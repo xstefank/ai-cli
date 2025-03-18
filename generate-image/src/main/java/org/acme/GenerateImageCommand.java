@@ -1,6 +1,7 @@
 package org.acme;
 
 import dev.langchain4j.data.image.Image;
+import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.control.ActivateRequestContext;
 import jakarta.inject.Inject;
 import picocli.CommandLine;
@@ -28,7 +29,8 @@ public class GenerateImageCommand implements Runnable {
     @Override
     @ActivateRequestContext
     public void run() {
-        Image image = generateImageAiService.generateImage(prompt);
+        Uni<Image> imageUni = generateImageAiService.generateImage(prompt);
+        Image image = imageUni.await().indefinitely();
         String generatedName = generateImageAiService.name(image);
         String name = formatter.format(Instant.now()) + "-" + generatedName;
 
