@@ -24,6 +24,9 @@ public class GenerateImageCommand implements Runnable {
     @CommandLine.Parameters(paramLabel = "<prompt>", description = "The prompt for the generated image.")
     String prompt;
 
+    @CommandLine.Option(names = {"--no-anim"}, defaultValue = "false", description = "Disable loading animation. Use in scripts.")
+    boolean noAnim;
+
     @Inject
     GenerateImageAiService generateImageAiService;
 
@@ -32,22 +35,28 @@ public class GenerateImageCommand implements Runnable {
     @Override
     @ActivateRequestContext
     public void run() {
+        if (noAnim) {
+            mainCommand();
+        } else {
+            try {
+                wrapWithWait(executor.submit(this::mainCommand));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private void mainCommand() {
         try {
-            wrapWithWait(executor.submit(() -> {
-                try {
-                    Image image = generateImageAiService.generateImage(prompt);
-                    String generatedName = generateImageAiService.name(image);
+            Image image = generateImageAiService.generateImage(prompt);
+            String generatedName = generateImageAiService.name(image);
 
-                    String name = formatter.format(Instant.now()) + "-" + generatedName;
+            String name = formatter.format(Instant.now()) + "-" + generatedName;
 
-                    BufferedImage bufferedImage = ImageIO.read(image.url().toURL());
-                    File file = new File("/home/mstefank/Pictures/" + name);
-                    ImageIO.write(bufferedImage, "png", file);
-                    System.out.write(("\r" + file.getAbsolutePath() + "\n").getBytes());
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }));
+            BufferedImage bufferedImage = ImageIO.read(image.url().toURL());
+            File file = new File("/home/mstefank/Pictures/" + name);
+            ImageIO.write(bufferedImage, "png", file);
+            System.out.write(("\r" + file.getAbsolutePath() + "\n").getBytes());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
