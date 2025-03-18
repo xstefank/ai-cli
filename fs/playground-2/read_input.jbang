@@ -1,0 +1,13 @@
+//usr/bin/env jbang 
+
+import java.util.Scanner;
+
+public class ReadInput {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter a line: ");
+        String inputLine = scanner.nextLine();
+        System.out.println("You entered: " + inputLine);
+        scanner.close();
+    }
+}

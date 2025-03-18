@@ -1,0 +1,32 @@
+= openai-grammar
+
+A simple application that calls the OpenAI server to fix grammar errors in the provided text.
+
+== Requirements
+
+Requires an environment variable `GRAMMAR_CHECK_OPENAI_KEY` to be set to your OpenAI key - https://platform.openai.com/api-keys.
+
+== Usage
+
+Easiest with https://www.jbang.dev/[JBang]:
+
+    jbang https://github.com/xstefank/openai-grammar/blob/main/JBangGrammarCheck.java "Dobry den, opravis mi chyby prosim?"
+    Dobrý den, opravíš mi chyby, prosím?
+
+    jbang https://github.com/xstefank/openai-grammar/blob/main/JBangGrammarCheck.java -l Slovak "Dobry den, opravis mi chyby prosim?"
+    Dobrý deň, opravíš mi chyby, prosím?
+
+Or with locally build Quarkus native:
+
+    openai-grammar-1.0.0-SNAPSHOT-runner "Dobry den, opravis mi chyby prosim?"
+    Dobrý den, opravíš mi chyby, prosím?
+
+    openai-grammar-1.0.0-SNAPSHOT-runner -l Slovak "Dobry den, opravis mi chyby prosim?"
+    Dobrý deň, opravíš mi chyby, prosím?
+
+== Installation
+
+Build locally:
+
+    ./mvnw clean package -Dnative
+
