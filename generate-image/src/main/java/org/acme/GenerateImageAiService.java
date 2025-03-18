@@ -3,8 +3,10 @@ package org.acme;
 import dev.langchain4j.data.image.Image;
 import dev.langchain4j.service.UserMessage;
 import io.quarkiverse.langchain4j.RegisterAiService;
+import jakarta.enterprise.context.ApplicationScoped;
 
 @RegisterAiService
+@ApplicationScoped
 public interface GenerateImageAiService {
 
     Image generateImage(String prompt);
