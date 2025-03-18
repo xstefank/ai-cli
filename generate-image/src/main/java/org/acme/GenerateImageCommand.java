@@ -33,30 +33,34 @@ public class GenerateImageCommand implements Runnable {
     @ActivateRequestContext
     public void run() {
         try {
-            int counter = 0;
+            wrapWithWait(executor.submit(() -> {
+                try {
+                    Image image = generateImageAiService.generateImage(prompt);
+                    String generatedName = generateImageAiService.name(image);
 
-            Image image = get(executor.submit(() -> generateImageAiService.generateImage(prompt)));
-            String generatedName = get(executor.submit(() -> generateImageAiService.name(image)));
+                    String name = formatter.format(Instant.now()) + "-" + generatedName;
 
-            String name = formatter.format(Instant.now()) + "-" + generatedName;
-
-            BufferedImage bufferedImage = ImageIO.read(image.url().toURL());
-            File file = new File("/home/mstefank/Pictures/" + name);
-            ImageIO.write(bufferedImage, "png", file);
-            System.out.write(("\rGenerated image at " + file.getAbsolutePath() + "\n").getBytes());
+                    BufferedImage bufferedImage = ImageIO.read(image.url().toURL());
+                    File file = new File("/home/mstefank/Pictures/" + name);
+                    ImageIO.write(bufferedImage, "png", file);
+                    System.out.write(("\r" + file.getAbsolutePath() + "\n").getBytes());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    private <T> T get(Future<T> future) throws Exception {
+    private <T> T wrapWithWait(Future<T> future) throws Exception {
         String anim = "|/-\\";
         int counter = 0;
 
         while (!future.isDone()) {
             String data = "\r" + anim.charAt(counter++ % anim.length());
-                System.out.write(data.getBytes());
-                Thread.sleep(100);
+            System.out.write(data.getBytes());
+            Thread.sleep(100);
         }
 
         return future.get();
