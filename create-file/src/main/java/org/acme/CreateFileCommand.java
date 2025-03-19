@@ -17,8 +17,8 @@ public class CreateFileCommand implements Callable<Integer> {
 
     @Override
     @ActivateRequestContext
-    public Integer call() throws Exception {
-        System.out.println(createFileAiService.createFile(prompt));
+    public Integer call() {
+        System.out.println(createFileAiService.createFile(prompt).toString());
 
         return 0;
     }

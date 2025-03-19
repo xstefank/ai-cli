@@ -11,11 +11,18 @@ public interface CreateFileAiService {
         You are a coding bot that creates single file scripts.
         """)
     @UserMessage("""
-        Create new file for the given prompt. Output only the
-        generated file content and nothing else. Use the markdown (```)
-        notation.
+        Create new file for the given prompt. Output only the name
+        and the content of the file in the form of JSON file which is the 
+        only allowed output. The format of the resulting JSON is:
+        
+        ```json
+        {
+            "name": "<name-of-the-generated-file>",
+            "content": "<content-of-the-generated-file>"
+        }
+        ```
         
         The prompt for this request is "{prompt}".
         """)
-    String createFile(String prompt);
+    GeneratedFile createFile(String prompt);
 }
