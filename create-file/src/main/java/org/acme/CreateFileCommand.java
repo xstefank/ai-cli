@@ -15,6 +15,10 @@ public class CreateFileCommand implements Callable<Integer> {
     @Inject
     CreateFileAiService createFileAiService;
 
+    @CommandLine.Option(names = {"-n", "--name"}, description = "The language for which to check the grammar.")
+    String name;
+
+
     @CommandLine.Parameters(paramLabel = "<prompt>", description = "The prompt for the generated file.")
     String prompt;
 
@@ -23,7 +27,7 @@ public class CreateFileCommand implements Callable<Integer> {
     public Integer call() throws IOException {
         GeneratedFile generatedFile = createFileAiService.createFile(prompt);
 
-        Files.write(Path.of(generatedFile.name), generatedFile.content.getBytes());
+        Files.write(Path.of(name != null ? name : generatedFile.name), generatedFile.content.getBytes());
 
         return 0;
     }
