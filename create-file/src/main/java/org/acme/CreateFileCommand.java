@@ -1,5 +1,7 @@
 package org.acme;
 
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.quarkus.mailer.Mail;
 import io.quarkus.mailer.Mailer;
 import jakarta.enterprise.context.control.ActivateRequestContext;
@@ -31,7 +33,13 @@ public class CreateFileCommand implements Callable<Integer> {
 
     @Override
     @ActivateRequestContext
+    @WithSpan
     public Integer call() throws IOException {
+        Span span = Span.current();
+        span.setAttribute("name", name);
+        span.setAttribute("email", email);
+        span.setAttribute("prompt", prompt);
+
         GeneratedFile generatedFile = createFileAiService.createFile(prompt);
 
         String fileName = name != null ? name : generatedFile.name;

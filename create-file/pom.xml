@@ -58,8 +58,7 @@
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-junit5</artifactId>
-            <scope>test</scope>
+            <artifactId>quarkus-opentelemetry</artifactId>
         </dependency>
     </dependencies>
 
