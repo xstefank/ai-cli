@@ -16,7 +16,7 @@ import java.util.concurrent.Callable;
 @CommandLine.Command
 public class CreateFileCommand implements Callable<Integer> {
 
-    @CommandLine.Option(names = {"-n", "--name"}, description = "The language for which to check the grammar.")
+    @CommandLine.Option(names = {"-n", "--name"}, description = "The name for the generated file.")
     String name;
 
     @CommandLine.Option(names = {"-e", "--email"}, description = "The email to send the generated file to.")

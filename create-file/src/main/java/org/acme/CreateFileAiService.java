@@ -12,7 +12,7 @@ public interface CreateFileAiService {
         """)
     @UserMessage("""
         Create new file for the given prompt. Output only the name
-        and the content of the file in the form of JSON file which is the 
+        and the content of the file in the form of JSON file which is the
         only allowed output. The format of the resulting JSON is:
         
         ```json
