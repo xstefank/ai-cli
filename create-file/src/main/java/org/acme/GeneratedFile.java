@@ -1,5 +1,8 @@
 package org.acme;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
+@RegisterForReflection
 public class GeneratedFile {
 
     public String name;
