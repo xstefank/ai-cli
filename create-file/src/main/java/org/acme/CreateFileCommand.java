@@ -44,6 +44,7 @@ public class CreateFileCommand implements Callable<Integer> {
 
         String fileName = name != null ? name : generatedFile.name;
         Files.write(Path.of(fileName), generatedFile.content.getBytes());
+        System.out.println("File created: " + fileName);
 
         if (email != null) {
             mailer.send(Mail.withHtml(email, fileName, "Here is your generated file: " + fileName)
