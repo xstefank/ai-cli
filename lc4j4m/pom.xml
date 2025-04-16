@@ -27,15 +27,22 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>${quarkus.platform.group-id}</groupId>
+                <artifactId>quarkus-camel-bom</artifactId>
+                <version>${quarkus.platform.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
-        <dependency>
-            <groupId>io.quarkiverse.langchain4j</groupId>
-            <artifactId>quarkus-langchain4j-openai</artifactId>
-            <version>${version.io.quarkiverse.langchain4j}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.quarkiverse.langchain4j</groupId>-->
+<!--            <artifactId>quarkus-langchain4j-openai</artifactId>-->
+<!--            <version>${version.io.quarkiverse.langchain4j}</version>-->
+<!--        </dependency>-->
 <!--        <dependency>-->
 <!--            <groupId>io.quarkiverse.langchain4j</groupId>-->
 <!--            <artifactId>quarkus-langchain4j-ai-gemini</artifactId>-->
@@ -43,8 +50,18 @@
 <!--        </dependency>-->
         <dependency>
             <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j</artifactId>
+            <version>1.0.0-beta3</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-core</artifactId>
+            <version>1.0.0-beta3</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-google-ai-gemini</artifactId>
-            <version>1.0.0-beta1</version>
+            <version>1.0.0-beta3</version>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
