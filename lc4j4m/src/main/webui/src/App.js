@@ -1,5 +1,7 @@
 import axios from 'axios';
 import {useState} from "react";
+import TextareaAutosize from 'react-textarea-autosize';
+
 
 function App() {
 
@@ -33,12 +35,16 @@ function App() {
 
       <form action="#" className="llm-form">
         <div className="input-wrapper">
-          <label>Temperature: </label><input type="text" className="hyperparam" onChange={(e) => {setTemp(e.target.value)}}/>
+
+            <label>Temperature: </label><input type="text" className="hyperparam" onChange={(e) => {setTemp(e.target.value)}}/>
+
           <label>Top-K: </label><input type="text" className="hyperparam" onChange={(e) => {setTopK(e.target.value)}}/>
-          <label>Top-P</label><input type="text" className="hyperparam" onChange={(e) => {setTopP(e.target.value)}}/>
-          <textarea name="text" onChange={(e) => {
-            setPrompt(e.target.value)
-          }} cols="30" rows="10" className="llm-input" placeholder="Enter your prompt here..." required/>
+          <label>Top-P:</label><input type="text" className="hyperparam" onChange={(e) => {setTopP(e.target.value)}}/>
+          {/*<textarea name="text" onChange={(e) => {*/}
+          {/*  setPrompt(e.target.value)*/}
+          {/*}} cols="30" rows="10" className="llm-input" placeholder="Enter your prompt here..." required/>*/}
+          <TextareaAutosize onChange={(e) => {setPrompt(e.target.value)}}
+                            className="llm-input" cols="30" rows="10" placeholder="Enter your prompt here..." />
         </div>
 
         <input type="submit" onClick={submit} className="llm-button" value="Send"/>

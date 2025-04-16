@@ -36,10 +36,15 @@
             <artifactId>quarkus-langchain4j-openai</artifactId>
             <version>${version.io.quarkiverse.langchain4j}</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.quarkiverse.langchain4j</groupId>-->
+<!--            <artifactId>quarkus-langchain4j-ai-gemini</artifactId>-->
+<!--            <version>${version.io.quarkiverse.langchain4j}</version>-->
+<!--        </dependency>-->
         <dependency>
-            <groupId>io.quarkiverse.langchain4j</groupId>
-            <artifactId>quarkus-langchain4j-ai-gemini</artifactId>
-            <version>${version.io.quarkiverse.langchain4j}</version>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-google-ai-gemini</artifactId>
+            <version>1.0.0-beta1</version>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
