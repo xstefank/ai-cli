@@ -69,6 +69,12 @@ textarea {
     font-size: 18px;
 }
 
+.loading-box {
+    display: none;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
 .llm-form .llm-button {
     margin-top: 0.5rem;
     cursor: pointer;
@@ -92,6 +98,7 @@ textarea {
 }
 
 .main-container .llm-output {
+    display: block;
     text-align: left;
     font-size: 18px;
     margin-top: 1.87rem;

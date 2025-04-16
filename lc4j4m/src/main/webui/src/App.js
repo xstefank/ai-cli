@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {useState} from "react";
 import TextareaAutosize from 'react-textarea-autosize';
+import {Commet} from "react-loading-indicators";
 
 
 function App() {
@@ -11,7 +12,13 @@ function App() {
   const [topk, setTopK] = useState('');
   const [topp, setTopP] = useState('');
 
+  const loading = document.getElementById("loading-box");
+  const llmOutput = document.getElementById("llm-output-wrapper");
+
+
   let submit = async (e) => {
+    loading.style.display = "flex";
+    llmOutput.style.display = "none";
     try {
       await axios.post("http://localhost:8123/chat", {
         "prompt": prompt,
@@ -20,6 +27,8 @@ function App() {
         "topK": topk,
         "topP": topp
       }).then(value => {
+        loading.style.display = "none";
+        llmOutput.style.display = "block";
         document.getElementById("llm-output").value = value.data;
       });
     } catch (e) {
@@ -28,7 +37,7 @@ function App() {
   }
 
   let onEnterPress = (e) => {
-    if(e.keyCode === 13 && e.ctrlKey === true) {
+    if (e.keyCode === 13 && e.ctrlKey === true) {
       submit();
     }
   }
@@ -41,7 +50,7 @@ function App() {
         <div className="input-wrapper">
 
           <label>Model: </label><select name="model" value={model} onChange={(e) => {
-            setModel(e.target.value)
+          setModel(e.target.value)
         }} className="hyperparam" list="model-list">
           <option value="gemini-2.0-flash">gemini-2.0-flash</option>
           <option value="gemini-1.5-flash">gemini-1.5-flash</option>
@@ -58,13 +67,17 @@ function App() {
         }}/>
           <TextareaAutosize onChange={(e) => {
             setPrompt(e.target.value)
-          }} className="llm-input" cols="30" rows="10" placeholder="Enter your prompt here..." onKeyDown={onEnterPress} />
+          }} className="llm-input" cols="30" rows="10" placeholder="Enter your prompt here..." onKeyDown={onEnterPress}/>
         </div>
 
         <input type="submit" className="llm-button" value="Send"/>
       </form>
 
-      <div className="output-wrapper">
+      <div className="loading-box" id="loading-box">
+        <Commet color={["#32cd32", "#327fcd", "#cd32cd", "#cd8032"]}/>
+      </div>
+
+      <div className="output-wrapper" id="llm-output-wrapper">
         <textarea id="llm-output" name="output" cols="30" rows="10" className="llm-output" placeholder="Output will be shown here..." required/>
       </div>
 
