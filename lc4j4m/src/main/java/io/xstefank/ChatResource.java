@@ -30,31 +30,30 @@ public class ChatResource {
 //            .apiKey(ApiKeys.OPENAI_API_KEY)
 //            .build();
 
-        ChatLanguageModel chatModel = GoogleAiGeminiChatModel.builder()
+        GoogleAiGeminiChatModel.GoogleAiGeminiChatModelBuilder chatModelBuilder = GoogleAiGeminiChatModel.builder()
             .apiKey(ApiKeys.GEMINI_API_KEY)
             .modelName(prompt.model())
             .logRequestsAndResponses(true)
-            .build();
-
-        DefaultChatRequestParameters.Builder<?> builder = ChatRequestParameters.builder()
             .temperature(prompt.temperature());
 
         if (prompt.topK() != null) {
-            builder.topK(prompt.topK());
+            chatModelBuilder.topK(prompt.topK());
         }
 
         if (prompt.topP() != null) {
-            builder.topP(prompt.topP());
+            chatModelBuilder.topP(prompt.topP());
         }
-        ChatRequestParameters parameters = builder.build();
+
+        ChatLanguageModel chatModel = chatModelBuilder
+            .build();
 
         ChatRequest chatRequest = ChatRequest.builder()
             .messages(UserMessage.from(prompt.prompt()))
-            .parameters(parameters)
             .build();
 
         return chatModel.chat(chatRequest).aiMessage().text();
     }
+
 
     @GET
     @Path("streaming")
@@ -67,33 +66,38 @@ public class ChatResource {
             .build();
 
         ChatRequest chatRequest = ChatRequest.builder()
-            .messages(UserMessage.from("Write a story with 1000 words."))
+            .messages(UserMessage.from("Write a story with 100 words."))
             .parameters(ChatRequestParameters.builder().build())
             .build();
 
-//        StreamingChatResponseHandler streamingChatResponseHandler = new StreamingChatResponseHandler() {
-//            @Override
-//            public void onPartialResponse(String token) {
-//                System.out.println("ChatResource.onPartialResponse");
-//                emitter.emit(token);
-//            }
-//
-//            @Override
-//            public void onError(Throwable error) {
-//                System.out.println("ChatResource.onError");
-//                emitter.fail(error);
-//            }
-//
-//            @Override
-//            public void onCompleteResponse(ChatResponse completeResponse) {
-//                System.out.println("ChatResource.onCompleteResponse");
-//                emitter.complete();
-//            }
-//        };
+        return Multi.createFrom().emitter(emitter -> {
+            emitter.emit("before 1");
+            emitter.emit("before 2");
+            streamingChatModel.chat(chatRequest,
+                new StreamingChatResponseHandler() {
+                    @Override
+                    public void onPartialResponse(String token) {
+                        emitter.emit(token);
+                        System.out.println("ChatResource.onPartialResponse " + token);
+                    }
 
-//        streamingChatModel.chat(chatRequest, streamingChatResponseHandler);
+                    @Override
+                    public void onError(Throwable error) {
+                        emitter.fail(error);
+                        System.out.println("ChatResource.onError");
+                        System.out.println("error = " + error);
+                    }
 
-//        });
-        return null;
+                    @Override
+                    public void onCompleteResponse(ChatResponse completeResponse) {
+                        emitter.complete();
+                        System.out.println("ChatResource.onCompleteResponse");
+                    }
+                });
+            emitter.emit("test 1");
+            emitter.emit("test 2");
+            emitter.emit("test 3");
+        });
+
     }
 }
