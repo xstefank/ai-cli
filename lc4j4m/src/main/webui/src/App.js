@@ -17,6 +17,8 @@ function App() {
 
 
   let submit = async (e) => {
+    if (e != undefined) e.preventDefault();
+
     loading.style.display = "flex";
     llmOutput.style.display = "none";
     try {
@@ -49,13 +51,14 @@ function App() {
       <form action="#" className="llm-form" onSubmit={submit} id="llmForm">
         <div className="input-wrapper">
 
-          <label>Model: </label><select name="model" value={model} onChange={(e) => {
-          setModel(e.target.value)
-        }} className="hyperparam" list="model-list">
-          <option value="gemini-2.0-flash">gemini-2.0-flash</option>
-          <option value="gemini-1.5-flash">gemini-1.5-flash</option>
-          <option value="gemini-1.5-pro">gemini-1.5-pro</option>
-        </select>
+          <label>Model: </label>
+          <select onChange={(e) => {
+            setModel(e.target.value)
+          }} className="hyperparam">
+            <option value="gemini-1.5-flash">gemini-1.5-flash</option>
+            <option value="gemini-1.5-pro">gemini-1.5-pro</option>
+            <option value="gemini-2.0-flash">gemini-2.0-flash</option>
+          </select>
           <label>Temperature: </label><input type="text" className="hyperparam" onChange={(e) => {
           setTemp(e.target.value)
         }}/>
