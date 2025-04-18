@@ -9,6 +9,8 @@ import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
 import dev.langchain4j.model.googleai.GoogleAiGeminiChatModel;
 import dev.langchain4j.model.googleai.GoogleAiGeminiStreamingChatModel;
+import dev.langchain4j.model.openai.OpenAiChatModel;
+import dev.langchain4j.model.openai.OpenAiChatModelName;
 import io.quarkus.logging.Log;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.subscription.MultiEmitter;
@@ -30,22 +32,42 @@ public class ChatResource {
 //            .apiKey(ApiKeys.OPENAI_API_KEY)
 //            .build();
 
-        GoogleAiGeminiChatModel.GoogleAiGeminiChatModelBuilder chatModelBuilder = GoogleAiGeminiChatModel.builder()
-            .apiKey(ApiKeys.GEMINI_API_KEY)
-            .modelName(prompt.model())
-            .logRequestsAndResponses(true)
-            .temperature(prompt.temperature());
+        ChatLanguageModel chatModel = null;
 
-        if (prompt.topK() != null) {
-            chatModelBuilder.topK(prompt.topK());
+        String model = prompt.model();
+
+        if (model.startsWith("gemini")) {
+            GoogleAiGeminiChatModel.GoogleAiGeminiChatModelBuilder chatModelBuilder = GoogleAiGeminiChatModel.builder()
+                .apiKey(ApiKeys.GEMINI_API_KEY)
+                .modelName(prompt.model())
+                .logRequestsAndResponses(true)
+                .temperature(prompt.temperature());
+
+            if (prompt.topK() != null) {
+                chatModelBuilder.topK(prompt.topK());
+            }
+
+            if (prompt.topP() != null) {
+                chatModelBuilder.topP(prompt.topP());
+            }
+
+            chatModel = chatModelBuilder.build();
+        } else if (model.startsWith("gpt")) {
+            OpenAiChatModel.OpenAiChatModelBuilder chatModelBuilder = OpenAiChatModel.builder()
+                .apiKey(ApiKeys.OPENAI_API_KEY)
+                .modelName(prompt.model())
+                .logRequests(true).logResponses(true)
+                .temperature(prompt.temperature());
+
+            if (prompt.topP() != null) {
+                chatModelBuilder.topP(prompt.topP());
+            }
+
+            chatModel = chatModelBuilder.build();
+        } else {
+            throw new IllegalArgumentException("Unsupported chat model: " + prompt.model());
         }
 
-        if (prompt.topP() != null) {
-            chatModelBuilder.topP(prompt.topP());
-        }
-
-        ChatLanguageModel chatModel = chatModelBuilder
-            .build();
 
         ChatRequest chatRequest = ChatRequest.builder()
             .messages(UserMessage.from(prompt.prompt()))

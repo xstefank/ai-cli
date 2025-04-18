@@ -57,7 +57,8 @@ function App() {
           }} className="hyperparam">
             <option value="gemini-1.5-flash">gemini-1.5-flash</option>
             <option value="gemini-1.5-pro">gemini-1.5-pro</option>
-            <option value="gemini-2.0-flash">gemini-2.0-flash</option>
+            <option value="gemini-2.0-flash">geemini-2.0-flash</option>
+            <option value="gpt-4o-mini">gpt-4o-mini</option>
           </select>
           <label>Temperature: </label><input type="text" className="hyperparam" onChange={(e) => {
           setTemp(e.target.value)
