@@ -27,11 +27,6 @@ public class ChatResource {
 
     @POST
     public String chat(ChatPrompt prompt) {
-        Log.error(prompt);
-//        ChatLanguageModel chatModel = OpenAiChatModel.builder()
-//            .apiKey(ApiKeys.OPENAI_API_KEY)
-//            .build();
-
         ChatLanguageModel chatModel = null;
 
         String model = prompt.model();
