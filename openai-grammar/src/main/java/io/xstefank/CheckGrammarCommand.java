@@ -25,11 +25,27 @@ public class CheckGrammarCommand implements Runnable {
         Optional.ofNullable(System.getenv("GRAMMAR_CHECK_OPENAI_KEY")).orElseThrow(
             () -> new IllegalStateException("Required environment variable 'GRAMMAR_CHECK_OPENAI_KEY' not found. Please set it to the valid OpenAI token."));
 
-        System.out.println(getGrammarCheckAIService().fixGrammar(language, text));
+        notifySend(String.format("Sending clipboard for the %s grammar fix", language));
+        String result = getGrammarCheckAIService().fixGrammar(language, text);
+        notifySend("Received response for the grammar check");
+        System.out.println(result);
     }
 
     private GrammarCheckAIService getGrammarCheckAIService() {
         // Fallback to programmatic lookup (needed for JBang)
         return grammarCheckAIService != null ? grammarCheckAIService : Arc.container().select(GrammarCheckAIService.class).get();
+    }
+
+    private void notifySend(String text) {
+        if (!System.getProperty("os.name").toLowerCase().startsWith("linux")) {
+            return;
+        }
+
+        try {
+            new ProcessBuilder().command("notify-send", text).start().waitFor();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }
