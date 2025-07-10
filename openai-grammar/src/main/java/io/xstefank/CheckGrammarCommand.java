@@ -25,9 +25,9 @@ public class CheckGrammarCommand implements Runnable {
         Optional.ofNullable(System.getenv("GRAMMAR_CHECK_OPENAI_KEY")).orElseThrow(
             () -> new IllegalStateException("Required environment variable 'GRAMMAR_CHECK_OPENAI_KEY' not found. Please set it to the valid OpenAI token."));
 
-        notifySend(String.format("Sending clipboard for the %s grammar fix", language));
+        notifySend(String.format("%s grammar fix -- sent", language));
         String result = getGrammarCheckAIService().fixGrammar(language, text);
-        notifySend("Received response for the grammar check");
+        notifySend("Grammar fix done");
         System.out.println(result);
     }
 
